@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Stop } from './stop.entity';
 import { StopSeeder } from './stop.seed';
 import { State } from 'src/state/state.entity';
+import { StopPriceModule } from 'src/stopPrice/stopPrice.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Stop, State])],
+  imports: [TypeOrmModule.forFeature([Stop, State]), StopPriceModule],
   controllers: [StopController],
   providers: [StopService, StopSeeder],
 })

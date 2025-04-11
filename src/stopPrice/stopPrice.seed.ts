@@ -1,4 +1,3 @@
-// src/stopPrice/stopPrice.seeder.ts
 import { Injectable } from '@nestjs/common';
 import { StopPrice } from './stopPrice.entity';
 import { Repository } from 'typeorm';
@@ -15,7 +14,7 @@ export class StopPriceSeeder {
   ) {}
 
   async seed() {
-    //await this.stopPriceRepo.clear();
+    await this.stopPriceRepo.clear();
 
     const stops = await this.stopRepo.find();
     const allPrices: StopPrice[] = [];
@@ -27,14 +26,19 @@ export class StopPriceSeeder {
         if (stop.state.code === "IL") {
             price += 0.5 // Illinois is always more expensive :)
         }
-        const stopPrice = this.stopPriceRepo.create({ price, stop });
+        const timestamp = this.generateRandomTimestamp(5);
+        const stopPrice = this.stopPriceRepo.create({ price, stop, timestamp });
         allPrices.push(stopPrice);
       }
     }
-    //console.log("PRICES", allPrices);
-
     await this.stopPriceRepo.save(allPrices);
-
-    console.log("POST-PRICES", await this.stopPriceRepo.find())
   }
+
+    private generateRandomTimestamp(max_hours_ago: number): Date {
+        const now = new Date();
+        const maxMinutesAgo = max_hours_ago * 60;
+        const randomMinutes = Math.floor(Math.random() * maxMinutesAgo);
+        const randomTimestamp = new Date(now.getTime() - randomMinutes * 60000);
+        return randomTimestamp;
+    }
 }

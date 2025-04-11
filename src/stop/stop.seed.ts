@@ -14,18 +14,18 @@ export class StopSeeder  {
     @InjectRepository(State)
     private stateRepo: Repository<State>,
   ) {}
-async seed() {
-    await this.stopRepo.clear();
-    const states: State[] = await this.stateRepo.find();
+    async seed() {
+        await this.stopRepo.clear();
+        const states: State[] = await this.stateRepo.find();
 
-    // Create 10 random stops per state
-    const stops = states.flatMap(state => 
-        Array.from({ length: 10 }, (_, index) => ({
-            id: `STOP-${state.code}-${index + 1}`, // Unique ID for each stop
-            state: state,
-        }))
-    );
+        // Create 10 random stops per state
+        const stops = states.flatMap(state => 
+            Array.from({ length: 10 }, (_, index) => ({
+                id: `STOP-${state.code}-${index + 1}`, // Unique ID for each stop
+                state: state,
+            }))
+        );
 
-    await this.stopRepo.save(stops);
-}
+        await this.stopRepo.save(stops);
+    }
 }
